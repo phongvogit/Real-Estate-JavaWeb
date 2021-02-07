@@ -1,0 +1,10 @@
+/* nav-main */
+body{background: url('../images/1.jpg') no-repeat fixed; background-size: 100% 100%;}
+.form-container{border: 1px solid black; padding: 50px 60px; margin-top: 20vh;
+    -webkit-box-shadow: -1px 4px 20px 11px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 4px 20px 11px rgba(0,0,0,0.75);
+    box-shadow: -1px 4px 20px 11px rgba(0,0,0,0.75);
+    background-color: #434e5a;
+    opacity: .8;
+    color: #ffffff;
+}
