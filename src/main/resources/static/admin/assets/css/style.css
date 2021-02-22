@@ -176,3 +176,6 @@ nav{
         padding:0 !important;
     }
 }
+.inf tr > :first-child{
+    width: 300px !important;
+}

@@ -1,7 +1,9 @@
 package com.laptrinhjavaweb.dto;
 
 import com.laptrinhjavaweb.entity.RentAreaEntity;
+import com.laptrinhjavaweb.entity.UserEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BuildingDTO extends BaseDTO<BuildingDTO>{
@@ -14,7 +16,7 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
     private Integer numberOfBasement;
     private Integer floorArea;
     private String direction;
-    private String level;
+    private String rank;
     private String rentAreaDescription;
     private String district;
     private Integer rentCost;
@@ -28,16 +30,15 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
     private String deposit;
     private String payment;
     private String timeRent;
-    private String timeDecorator;
+    private String timeDecoration;
     private String managerName;
     private String managerPhone;
     private String rentArea;
-    private Integer areaRentFrom;
-    private Integer areaRentTo;
-    private Integer costRentFrom;
-    private Integer costRentTo;
-    private List<RentAreaEntity> rentAreas;
+    private List<RentAreaEntity> rentAreas = new ArrayList<>();
+    private String staffString;
+    private List<UserEntity> staffs = new ArrayList<>();
     private Boolean checkUpdate = false;
+    private String image;
 
     public String[] getBuildingTypes() {
         return buildingTypes;
@@ -47,41 +48,6 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
         this.buildingTypes = buildingType;
     }
 
-
-    public BuildingDTO() {
-    }
-
-    public Integer getAreaRentFrom() {
-        return areaRentFrom;
-    }
-
-    public void setAreaRentFrom(Integer areaRentFrom) {
-        this.areaRentFrom = areaRentFrom;
-    }
-
-    public Integer getAreaRentTo() {
-        return areaRentTo;
-    }
-
-    public void setAreaRentTo(Integer areaRentTo) {
-        this.areaRentTo = areaRentTo;
-    }
-
-    public Integer getCostRentFrom() {
-        return costRentFrom;
-    }
-
-    public void setCostRentFrom(Integer costRentFrom) {
-        this.costRentFrom = costRentFrom;
-    }
-
-    public Integer getCostRentTo() {
-        return costRentTo;
-    }
-
-    public void setCostRentTo(Integer costRentTo) {
-        this.costRentTo = costRentTo;
-    }
 
     public String getRentArea() {
         return rentArea;
@@ -145,14 +111,6 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
 
     public void setDirection(String direction) {
         this.direction = direction;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
     public String getRentAreaDescription() {
@@ -259,12 +217,12 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
         this.timeRent = timeRent;
     }
 
-    public String getTimeDecorator() {
-        return timeDecorator;
+    public String getTimeDecoration() {
+        return timeDecoration;
     }
 
-    public void setTimeDecorator(String timeDecorator) {
-        this.timeDecorator = timeDecorator;
+    public void setTimeDecoration(String timeDecoration) {
+        this.timeDecoration = timeDecoration;
     }
 
     public String getManagerName() {
@@ -297,5 +255,37 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
 
     public void setCheckUpdate(Boolean checkUpdate) {
         this.checkUpdate = checkUpdate;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public List<UserEntity> getStaffs() {
+        return staffs;
+    }
+
+    public void setStaffs(List<UserEntity> staffs) {
+        this.staffs = staffs;
+    }
+
+    public String getStaffString() {
+        return staffString;
+    }
+
+    public void setStaffString(String staffString) {
+        this.staffString = staffString;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

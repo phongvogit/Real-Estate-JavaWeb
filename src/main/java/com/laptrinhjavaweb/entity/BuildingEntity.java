@@ -1,9 +1,14 @@
 package com.laptrinhjavaweb.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "building")
@@ -81,10 +86,14 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "managerphone")
     private String managerPhone;
 
-    @OneToMany(mappedBy = "building", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<RentAreaEntity> rentAreas = new ArrayList<>();
+    @Column(name = "image")
+    private String image;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @JsonIgnoreProperties("building")
+    private Set<RentAreaEntity> rentAreas = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "assignmentbuilding",
             joinColumns = @JoinColumn(name = "buildingid"),
             inverseJoinColumns = @JoinColumn(name = "staffid"))
@@ -282,13 +291,6 @@ public class BuildingEntity extends BaseEntity {
         this.floorArea = floorArea;
     }
 
-    public List<RentAreaEntity> getRentAreas() {
-        return rentAreas;
-    }
-
-    public void setRentAreas(List<RentAreaEntity> rentAreas) {
-        this.rentAreas = rentAreas;
-    }
 
     public List<UserEntity> getStaffs() {
         return staffs;
@@ -296,5 +298,21 @@ public class BuildingEntity extends BaseEntity {
 
     public void setStaffs(List<UserEntity> staffs) {
         this.staffs = staffs;
+    }
+
+    public Set<RentAreaEntity> getRentAreas() {
+        return rentAreas;
+    }
+
+    public void setRentAreas(Set<RentAreaEntity> rentAreas) {
+        this.rentAreas = rentAreas;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

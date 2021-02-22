@@ -16,6 +16,18 @@ public class BuildingSearchRequestDto {
     private String managerPhone;
     private Integer staffId;
     private String[] buildingTypes;
+    private Integer limit = 5;
+    private Integer startPage;
+    private Integer currentPage = 1;
+
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
 
     public Integer getFloorArea() {
         return floorArea;
@@ -137,4 +149,19 @@ public class BuildingSearchRequestDto {
         this.numberOfBasement = numberOfBasement;
     }
 
+    public Integer getStartPage() {
+        return startPage;
+    }
+
+    public void setStartPage(Integer startPage) {
+        this.startPage = startPage;
+    }
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
 }

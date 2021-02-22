@@ -24,7 +24,6 @@ public class BaseDTO<T> implements Serializable {
     private String tableId = "tableList";
     private Integer limit;
     private Integer totalPage;
-    private Integer totalItem;
 
     public Long getId() {
         return id;
@@ -125,15 +124,6 @@ public class BaseDTO<T> implements Serializable {
     public void setTotalPage(Integer totalPage) {
         this.totalPage = totalPage;
     }
-
-    public Integer getTotalItem() {
-        return totalItem;
-    }
-
-    public void setTotalItem(Integer totalItem) {
-        this.totalItem = totalItem;
-    }
-
     public Long[] getIds() {
         return ids;
     }

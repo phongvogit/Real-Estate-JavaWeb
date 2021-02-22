@@ -4,7 +4,7 @@ import com.laptrinhjavaweb.dto.UserDTO;
 
 public class StaffResponseDTO {
     private String fullName;
-    private Long staffId;
+    private Long id;
     private String check;
 
     public String getFullName() {
@@ -15,13 +15,6 @@ public class StaffResponseDTO {
         this.fullName = fullName;
     }
 
-    public Long getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(Long staffId) {
-        this.staffId = staffId;
-    }
 
     public String getCheck() {
         return check;
@@ -31,4 +24,11 @@ public class StaffResponseDTO {
         this.check = check;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

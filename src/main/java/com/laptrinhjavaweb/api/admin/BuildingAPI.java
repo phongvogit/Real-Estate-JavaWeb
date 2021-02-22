@@ -14,28 +14,10 @@ public class BuildingAPI {
     @Autowired
     private BuildingService buildingService;
 
-    @Autowired
-    private UserService userService;
-
     @PostMapping
     public ResponseDTO createBuilding(@RequestBody BuildingDTO newBuilding){
         ResponseDTO responseDTO = new ResponseDTO();
-        BuildingDTO  res = null;
-        try {
-            res = buildingService.saveNewBuilding(newBuilding);
-        }catch (Exception e){
-            System.out.println(e);
-        }
-        responseDTO.setData(res);
-        responseDTO.setMessage("success");
-        return responseDTO;
-    }
-
-
-    @GetMapping("/{buildingid}/staffs")
-    public ResponseDTO loadStaff(@PathVariable("buildingid") Long id){
-        ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setData(userService.loadStaffByBuildingId(id));
+        responseDTO.setData(buildingService.saveNewBuilding(newBuilding));
         responseDTO.setMessage("success");
         return responseDTO;
     }

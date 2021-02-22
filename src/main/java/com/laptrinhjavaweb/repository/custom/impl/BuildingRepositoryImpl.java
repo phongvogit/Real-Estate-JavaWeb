@@ -26,7 +26,8 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         sql.append("WHERE TRUE ");
         sql = buildSqlBuildingSpecial(model, sql);
         sql = buildSqlBuildingCommon(model, sql);
-
+        sql.append(" ORDER BY b.name ");
+        sql.append(" LIMIT "+model.getStartPage() +","+model.getLimit()+" ");
 
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         return query.getResultList();
@@ -80,7 +81,9 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 field.setAccessible(true);
                 if(field.get(model) != null && (!field.get(model).equals(""))){
                     if(!field.getName().equals("buildingTypes") && !field.getName().equals("staffId")
-                            && !field.getName().startsWith("areaRent") && !field.getName().startsWith("costRent")){
+                            && !field.getName().startsWith("areaRent") && !field.getName().startsWith("costRent")
+                            && !field.getName().startsWith("startPage") && !field.getName().startsWith("limit")
+                            && !field.getName().startsWith("currentPage")){
                         if(field.getType().getName().equals("java.lang.String")){
                             sql.append("AND b."+field.getName().toLowerCase()+" LIKE '%"+field.get(model)+"%' ");
                         } else if(field.getType().getName().equals("java.lang.Integer")){

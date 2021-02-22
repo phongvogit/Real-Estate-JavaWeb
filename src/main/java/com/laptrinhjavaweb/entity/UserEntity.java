@@ -6,7 +6,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class UserEntity extends BaseEntity {
+public class
+UserEntity extends BaseEntity {
 
     private static final long serialVersionUID = -4988455421375043688L;
 
@@ -39,6 +40,8 @@ public class UserEntity extends BaseEntity {
 
     @ManyToMany(mappedBy = "staffs", fetch = FetchType.LAZY)
     private List<BuildingEntity> buildings = new ArrayList<>();
+
+    @OneToMany
 
     public String getUserName() {
         return userName;

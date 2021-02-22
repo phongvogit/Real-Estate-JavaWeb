@@ -202,7 +202,7 @@
                     row += '<div class="input-group mb-3">';
                     row +=      '<div class="input-group-prepend">';
                     row +=          '<div class="input-group-text">';
-                    row +=              '<input type="checkbox" aria-label="Checkbox for following text input" name="staff" value='+ item.staffId +' '+ item.check +'>';
+                    row +=              '<input type="checkbox" aria-label="Checkbox for following text input" name="staff" value='+ item.id +' '+ item.check +'>';
                     row +=          '</div>';
                     row +=      '</div>';
                     row += '    <input class="form-control bg-white" value="'+ item.fullName +'" disabled>';

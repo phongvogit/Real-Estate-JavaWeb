@@ -3,7 +3,9 @@
 <%@include file="/common/taglib.jsp"%>
 <c:url var="buildingListURL" value="/admin/building-list"/>
 <c:url var="buildingEditURL" value="/admin/building-edit/"/>
+<c:url var="buildingViewURL" value="/admin/building-view/"/>
 <c:url var="buildingAPI" value="/api/building"/>
+<c:url var="assignmentAPI" value="/api/assignment/"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -16,7 +18,7 @@
     <li class="breadcrumb-item"><a href="#">Product</a></li>
     <li class="breadcrumb-item active" aria-current="page">List & Search</li>
 </div>
-<div class="widget-box">
+<div class="widget-box" style="background-image: none">
     <!-- Card -->
     <div class="card">
         <div class="card-header px-3 py-1">
@@ -123,6 +125,8 @@
                                 <form:checkboxes path="buildingTypes" items="${buildingTypeMaps}" cssClass="form-check-input" />
                             </div>
                     </div>
+                    <input type="hidden" id="page" name="currentPage" value="">
+                    <input type="hidden" id="maxPageItem" name="limit" value="">
                     <button type="submit" class="btn btn-success px-5 py-2" id="btnSearch">Search</button>
                 </form:form>
             </div>
@@ -140,8 +144,8 @@
         </div>
     </div>
     <!-- Table-->
-
-        <div class="widget-table">
+    <div class="mx-auto">
+        <div class="widget-table mb-0">
             <table class="table table-hover table-border text-center">
                 <thead>
                 <tr>
@@ -155,36 +159,44 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="item" items="${buildings}" >
+                <c:forEach var="item" items="${buildingResponse.buildings}" >
                     <form action="${buildingEditURL}${item.id}" commandName="modelSearch" method="get">
-                    <tr >
-                        <th class="check-box"><input type="checkbox" value="${item.id}"></th>
-                        <td>${item.name}</td>
-                        <td>${item.managerName}</td>
-                        <td>${item.street}</td>
-                        <td>${item.serviceCost}$</td>
-                        <td>${item.floorArea}$</td>
-                        <input type="hidden" name="id" value="${item.id}">
-                        <td>
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="assignmentBuilding(${item.id})" >
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                            <button type="submit" class="btn btn-info text-white"  data-toggle="tooltip" title='Update' id="btnEdit">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            </button>
-                                <%--                        <button type="button" class="btn btn-info" data-toggle="modal" title='Add more'>--%>
-                                <%--                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>--%>
-                                <%--                        </button>--%>
-                                <%--                        <button type="button" class="btn btn-info" data-toggle="modal" title='Add more'>--%>
-                                <%--                            <i class="fa fa-plus" aria-hidden="true"></i>--%>
-                                <%--                        </button>--%>
-                        </td>
-                    </tr>
+                        <tr >
+                            <th class="check-box"><input type="checkbox" value="${item.id}"></th>
+                            <td>${item.name}</td>
+                            <td>${item.managerName}</td>
+                            <td>${item.street}</td>
+                            <td>${item.serviceCost}$</td>
+                            <td>${item.floorArea}$</td>
+                            <input type="hidden" name="id" value="${item.id}">
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="assignmentBuilding(${item.id})" >
+                                    <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                </button>
+                                <a type="button" class="btn btn-info text-white"  data-toggle="tooltip" title='Update' id="btnEdit" href="<c:url value="${buildingEditURL}${item.id}"/>">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                                <a type="button" class="btn btn-info" title='Read more' href="<c:url value="${buildingViewURL}${item.id}"/>">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
+                                    <%--                        <button type="button" class="btn btn-info" data-toggle="modal" title='Add more'>--%>
+                                    <%--                            <i class="fa fa-plus" aria-hidden="true"></i>--%>
+                                    <%--                        </button>--%>
+                            </td>
+                        </tr>
                     </form>
                 </c:forEach>
                 </tbody>
             </table>
         </div>
+        <div class="bg-white text-center mx-auto" style="width: 250px">
+            <nav aria-label="Page navigation example mx-auto ">
+                <ul class="pagination" id="pagination">
+                </ul>
+            </nav>
+        </nav>
+    </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="assignmentBuildingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -210,6 +222,25 @@
 <!-- Sub-script-->
 <!-- Sub-script-->
 <script>
+    var totalPages = ${buildingResponse.totalPage};
+    var currentPage = ${buildingResponse.page};
+    var limit = 5;
+    $(function () {
+        window.pagObj = $('#pagination').twbsPagination({
+            totalPages: totalPages,
+            visiblePages: 5,
+            startPage: currentPage,
+            onPageClick: function (event, page) {
+                if(currentPage != page){
+                    $('#maxPageItem').val(limit);
+                    $('#page').val(page)
+                    $('#listForm').submit();
+                }
+            }
+        }).on('page', function (event, page) {
+            console.info(page + ' (from event listening)');
+        });
+    });
     $(document).ready(function(){
         $("#chevron").click(function(){
             $("#chevron").toggleClass("fa-chevron-up fa-chevron-down");
@@ -263,7 +294,7 @@
     function loadStaff(id) {
         $.ajax({
             type: "GET",
-            url: "${buildingAPI}/"+id+"/staffs",
+            url: "${assignmentAPI}"+id+"/staffs",
             //contentType: 'application/json',
             //data: JSON.stringify(data),
             dataType:'json',
@@ -274,7 +305,7 @@
                     row += '<div class="input-group mb-3">';
                     row +=      '<div class="input-group-prepend">';
                     row +=          '<div class="input-group-text">';
-                    row +=              '<input type="checkbox" aria-label="Checkbox for following text input" value='+ item.staffId +' '+ item.check +'>';
+                    row +=              '<input type="checkbox" aria-label="Checkbox for following text input" value='+ item.id +' '+ item.check +'>';
                     row +=          '</div>';
                     row +=      '</div>';
                     row += '    <input class="form-control bg-white" value="'+ item.fullName +'" disabled>';
@@ -295,13 +326,13 @@
             return $(this).val();
         }).get();
         data['staffIds'] = ids;
-        data['id'] = buildingId;
+        data['buildingId'] = buildingId;
         saveAssignment(data);
     });
     function saveAssignment(data) {
         $.ajax({
-            url: '${buildingAPI}',
-            type: 'PUT',
+            url: '${assignmentAPI}building',
+            type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {

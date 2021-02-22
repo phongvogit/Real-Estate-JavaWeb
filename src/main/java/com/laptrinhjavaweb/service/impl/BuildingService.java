@@ -5,6 +5,7 @@ import com.laptrinhjavaweb.Enums.DistrictEnum;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.request.BuildingSearchRequestDto;
+import com.laptrinhjavaweb.dto.response.BuildingPageResponseDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
@@ -30,8 +31,6 @@ public class BuildingService implements IBuildingService {
     @Autowired
     private BuildingConverter buildingConverter;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Override
     @Transactional
@@ -39,51 +38,32 @@ public class BuildingService implements IBuildingService {
         //BuildingTypes
         if(model.getBuildingTypes() != null && model.getBuildingTypes().length != 0)
             model.setType(String.join(",", model.getBuildingTypes()));
-        BuildingEntity buildingEntity = buildingConverter.convertToEntity(model);;
-        // Saved Staffs
-        if(model.getStaffIds() != null && model.getStaffIds().length != 0){
-            buildingEntity = setStaffLists(buildingEntity, model);
-        }
-        //buildingEntity = saveRentArea(buildingEntity, model);
+        BuildingEntity buildingEntity = buildingConverter.convertToEntity(model);
+        buildingEntity = saveRentArea( buildingEntity, model);
         //Saved Building
-        buildingRepository.save(buildingEntity);
-        //Saved RentArea
-        saveRentArea(buildingEntity, model);
-        return buildingConverter.convertToDto(buildingEntity);
+        BuildingDTO result = buildingConverter.convertToDto(buildingRepository.save(buildingEntity));
+         return result;
     }
 
-    private BuildingEntity setStaffLists(BuildingEntity buildingEntity, BuildingDTO model){
-        if(buildingRepository.exists(model.getId())){
-            buildingEntity = buildingRepository.findOne(model.getId());
-            buildingEntity.getStaffs().clear();
-            for(Long id : model.getStaffIds()){
-                buildingEntity.getStaffs().add(userRepository.findOne(id));
-            }
-        }
-        return buildingEntity;
-    }
-
-
-    private void saveRentArea(BuildingEntity buildingEntity, BuildingDTO model){
+    private BuildingEntity saveRentArea(BuildingEntity buildingEntity, BuildingDTO model){
         if(model.getRentArea() != null && !model.getRentArea().equals("")){
             //Removed Old RentAreas
             if(model.getCheckUpdate() == true)
                 rentAreaRepository.deleteBuildingId(buildingEntity.getId());
 
             List<String> rentAreas = Arrays.asList(model.getRentArea().split(","));
-
             for(String i : rentAreas){
                 RentAreaEntity rentAreaEntity = new RentAreaEntity();
                 rentAreaEntity.setBuilding(buildingEntity);
                 try{
                     rentAreaEntity.setValue(Integer.parseInt(i));
-////                    buildingEntity.getRentAreas().add(rentAreaEntity);
-                    rentAreaRepository.save(rentAreaEntity);
+                    buildingEntity.getRentAreas().add(rentAreaEntity);
                 }catch (NumberFormatException e){
                     System.out.println(i + "is not valid number");
                 }
             }
         }
+        return buildingEntity;
     }
 
     @Override
@@ -94,13 +74,18 @@ public class BuildingService implements IBuildingService {
     }
 
     @Override
-    public List<BuildingDTO> findAll(BuildingSearchRequestDto model) {
-        List<BuildingDTO> results = new ArrayList<>();
+    public BuildingPageResponseDTO findAll(BuildingSearchRequestDto model) {
+        List<BuildingDTO> buildings = new ArrayList<>();
+        model.setStartPage((model.getCurrentPage() - 1) * model.getLimit());
         for(BuildingEntity item : buildingRepository.findAll(model)){
             BuildingDTO buildingDTO = buildingConverter.convertToDto(item);
-            results.add(buildingDTO);
+            buildings.add(buildingDTO);
         }
-        return results;
+        BuildingPageResponseDTO result = new BuildingPageResponseDTO();
+        result.setBuildings(buildings);
+        result.setPage(model.getCurrentPage());
+        result.setTotalPage((int) Math.ceil(buildingRepository.count() * 1.0 / model.getLimit()));
+        return result;
     }
 
     @Override
@@ -124,7 +109,7 @@ public class BuildingService implements IBuildingService {
                 buildingDTO.setBuildingTypes(buildingEntity.getType().split(","));
             return buildingDTO;
         }
-        return null;
+        return new BuildingDTO();
     }
 
     // District && BuildingTypes

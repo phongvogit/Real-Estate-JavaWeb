@@ -1,5 +1,8 @@
 package com.laptrinhjavaweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,8 +11,9 @@ public class RentAreaEntity extends BaseEntity {
 	
 	@Column(name = "value")
 	private Integer value;
-	
+
 	@ManyToOne
+	@JsonIgnoreProperties("rentAreas")
     @JoinColumn(name = "buildingid")
     private BuildingEntity building;
 
