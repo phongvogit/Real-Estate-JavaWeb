@@ -1,8 +1,8 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="buildingListURL" value="/admin/building-list"/>
-<c:url var="buildingEditURL" value="/admin/building-edit/"/>
+<c:url var="searchURL" value="${urlMapping}"/>
+<c:url var="buildingEditURL" value="/admin/building-edit"/>
 <c:url var="buildingViewURL" value="/admin/building-view/"/>
 <c:url var="buildingAPI" value="/api/building"/>
 <c:url var="assignmentAPI" value="/api/assignment/"/>
@@ -36,7 +36,7 @@
         <div class="collapse" id="collapseExample">
             <div class="card card-body">
                 <%--@elvariable id="modelSearch" type=""--%>
-                <form:form commandName="modelSearch" action="${buildingListURL}" id="listForm" method="GET">
+                <form:form commandName="modelSearch" action="" id="listForm" method="GET">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-6">
@@ -111,13 +111,15 @@
                                 <h5>Manager's Phone</h5>
                                 <form:input path="managerPhone" cssClass="form-control" />
                             </div>
-                            <div class="col-md-4">
-                                <h5>Select Task for Staff</h5>
-                                <form:select path="staffId" cssClass="form-control">
-                                    <form:option value="" label="---Select Task for Staff---"/>
-                                    <form:options items="${staffmaps}"/>
-                                </form:select>
-                            </div>
+                            <security:authorize access="hasRole('MANAGER')">
+                                <div class="col-md-4">
+                                    <h5>Select Task for Staff</h5>
+                                    <form:select path="staffId" cssClass="form-control">
+                                        <form:option value="" label="---Select Task for Staff---"/>
+                                        <form:options items="${staffmaps}"/>
+                                    </form:select>
+                                </div>
+                            </security:authorize>
                         </div>
                     </div>
                     <div class="row">
@@ -125,17 +127,18 @@
                                 <form:checkboxes path="buildingTypes" items="${buildingTypeMaps}" cssClass="form-check-input" />
                             </div>
                     </div>
-                    <input type="hidden" id="page" name="currentPage" value="">
-                    <input type="hidden" id="maxPageItem" name="limit" value="">
+                    <input type="hidden" id="page" name="currentPage" value="1">
+                    <input type="hidden" id="maxPageItem" name="limit" value="5">
                     <button type="submit" class="btn btn-success px-5 py-2" id="btnSearch">Search</button>
                 </form:form>
             </div>
         </div>
     </div>
     <!-- Sub-Btn -->
+    <security:authorize access="hasRole('MANAGER')">
     <div class="row sub-btn">
         <div class="col-12">
-            <a type="buttonAdd" class="btn btn-outline-dark" href="${buildingEditURL}-1" data-toggle="tooltip" title='Add more'>
+            <a type="buttonAdd" class="btn btn-outline-dark" href="${buildingEditURL}" data-toggle="tooltip" title='Add more'>
                 <i class="fa fa-plus-circle" aria-hidden="true" style="color: black;"></i>
             </a>
             <button type="btnDelete" class="btn btn-outline-danger" data-toggle="tooltip" title='Delete' id="btnDelete">
@@ -143,6 +146,7 @@
             </button>
         </div>
     </div>
+    </security:authorize>
     <!-- Table-->
     <div class="mx-auto">
         <div class="widget-table mb-0">
@@ -160,28 +164,30 @@
                 </thead>
                 <tbody>
                 <c:forEach var="item" items="${buildingResponse.buildings}" >
-                    <form action="${buildingEditURL}${item.id}" commandName="modelSearch" method="get">
+                    <form action="${buildingEditURL}/${item.id}" commandName="modelSearch" method="get">
                         <tr >
                             <th class="check-box"><input type="checkbox" value="${item.id}"></th>
                             <td>${item.name}</td>
                             <td>${item.managerName}</td>
                             <td>${item.street}</td>
                             <td>${item.serviceCost}$</td>
-                            <td>${item.floorArea}$</td>
+                            <td>${item.floorArea}</td>
                             <input type="hidden" name="id" value="${item.id}">
                             <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="assignmentBuilding(${item.id})" >
-                                    <i class="fa fa-newspaper-o" aria-hidden="true"></i>
-                                </button>
-                                <a type="button" class="btn btn-info text-white"  data-toggle="tooltip" title='Update' id="btnEdit" href="<c:url value="${buildingEditURL}${item.id}"/>">
+                                <security:authorize access="hasRole('MANAGER')">
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" onclick="assignmentBuilding(${item.id})" >
+                                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                    </button>
+                                </security:authorize>
+                                <a type="button" class="btn btn-info text-white"  data-toggle="tooltip" title='Update' id="btnEdit" href="<c:url value="${buildingEditURL}/${item.id}"/>">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
                                 <a type="button" class="btn btn-info" title='Read more' href="<c:url value="${buildingViewURL}${item.id}"/>">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </a>
-                                    <%--                        <button type="button" class="btn btn-info" data-toggle="modal" title='Add more'>--%>
-                                    <%--                            <i class="fa fa-plus" aria-hidden="true"></i>--%>
-                                    <%--                        </button>--%>
+                                <button type="button" class="btn btn-info" id="btnAddPriority" title='Add more'  onclick="addPriority(${item.id})" >
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
                             </td>
                         </tr>
                     </form>
@@ -189,14 +195,13 @@
                 </tbody>
             </table>
         </div>
-        <div class="bg-white text-center mx-auto" style="width: 250px">
-            <nav aria-label="Page navigation example mx-auto ">
-                <ul class="pagination" id="pagination">
-                </ul>
-            </nav>
+    </div>
+    <div class="bg-white text-center mx-auto" style="width: 250px">
+        <nav aria-label="Page navigation example mx-auto ">
+            <ul class="pagination" id="pagination">
+            </ul>
         </nav>
     </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="assignmentBuildingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -233,7 +238,7 @@
             onPageClick: function (event, page) {
                 if(currentPage != page){
                     $('#maxPageItem').val(limit);
-                    $('#page').val(page)
+                    $('#page').val(page);
                     $('#listForm').submit();
                 }
             }
@@ -262,23 +267,51 @@
                 $(".check-box input").removeAttr("checked");
             }
         });
+        $('#btnSearch').click(function (e) {
+            e.preventDefault();
+            $('#listForm').attr('action', '${searchURL}');
+            $('#listForm').submit();
+        });
+        $(document).keypress(function(e) {
+            if (e.which == 13) {
+                $('#listForm').attr('action', '${searchURL}');
+                $('#listForm').submit();
+                return false;
+            }
+        });
     });
+
+    function addPriority(buildingId){
+        $.ajax({
+            url: '${buildingAPI}/' + buildingId + '/priority',
+            type: 'POST',
+            success: function (res) {
+                window.location.href = "${searchURL}";
+            },
+            error: function (res) {
+                console.log(res);
+            }
+        });
+    }
     $("#btnDelete").click(function() {
         var data = {};
         var ids = $('tbody input[type=checkbox]:checked').map(function () {
             return $(this).val();
         }).get();
         data['ids'] = ids;
-        deleteNew(data);
+        var result = confirm("Want to Delete");
+        if(result){
+            deleteBuilding(data);
+        }
     });
-    function deleteNew(data) {
+    function deleteBuilding(data) {
         $.ajax({
             url: '${buildingAPI}',
             type: 'DELETE',
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
-                window.location.href="${buildingListURL}";
+                window.location.href="${searchURL}";
             },
             error: function (error) {
                 console.log("failed");
@@ -336,7 +369,7 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (result) {
-                console.log("success");
+                window.location.href="${searchURL}";
             },
             error: function (error) {
                 console.log("failed");

@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.service;
 
 import com.laptrinhjavaweb.dto.CustomerDTO;
+import com.laptrinhjavaweb.dto.response.CustomerPageResponseDTO;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface ICustomerService {
     //Delete
     void deleteCustomer(Long[] ids);
     // !Find
-    List<CustomerDTO> findAll(CustomerDTO customerDTO);
+    CustomerPageResponseDTO findAll(CustomerDTO customerDTO);
     CustomerDTO findCustomerById(Long id);
 
 

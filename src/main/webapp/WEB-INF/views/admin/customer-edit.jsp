@@ -18,7 +18,10 @@
 </div>
 <!-- Form -->
 <form:form class="p-3 m-5" style="border: 1px solid rgba(0,0,0,.125);"  id="formEdit" commandName="modelSearch"  method="GET">
-            <div class="form-group px-2">
+    <c:if test="${not empty message}">
+        <div class="alert alert-${message.get("alert")}">${message.get("message")}</div>
+    </c:if>
+    <div class="form-group px-2">
                 <div class="row my-2">
                     <div class="col-4">
                         <h5>Customer's Name</h5>
@@ -46,13 +49,13 @@
 <c:if test="${not empty modelSearch.id}">
     <c:forEach var="item" items="${transactionResponse.transactionTypeMaps}">
         <div class="p-3 mx-5 transactionInf">
-            <div class="title mb-4 col-3 p-0">
-                <label><h5 class="text-primary mr-2" >${item.value}</h5></label>
+            <div class="title mb-0 col-3 p-0">
+                <label><h5 class="text-primary mr-2">${item.value}</h5></label>
                 <button type="button" class="btn btn-info" title='Add more' data-toggle="modal" data-target="#addTransactionModal" onclick="loadTransactionTypeModal('${item.key}', '${item.value}', ${transactionResponse.customerid})">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
             </div>
-
+            <hr class="mt-0">
             <table class="table">
                 <thead>
                 <tr>
@@ -134,11 +137,9 @@
             dataType: "json",
             success: function (response) {
                 location.reload();
-                console.log("success");
             },
             error:function (response) {
                 console.log('failed');
-                console.log(response);
             }
         });
     }
@@ -151,6 +152,7 @@
             data[""+v.name+""] = v.value;
         });
         var id = $('#id').val();
+        data["id"] = id;
         if(id == ""){
             addNew(data);
         } else {
@@ -166,12 +168,10 @@
             data: JSON.stringify(data),
             dataType: "json",
             success: function (response) {
-                console.log("success");
-                window.location.href="${customerListUrl}";
+                window.location.href="${customerEditUrl}?message=insert_success";
             },
             error:function (response) {
-                console.log('failed');
-                console.log(response);
+                window.location.href="${customerEditUrl}?message=error_system";
             }
         });
     }
@@ -183,12 +183,10 @@
             data: JSON.stringify(data),
             dataType: "json",
             success: function (response) {
-                console.log("success");
-                window.location.href="${customerListUrl}";
+                window.location.href="${customerEditUrl}/"+response.data.id+"?message=update_success";
             },
             error:function (response) {
-                console.log('failed');
-                console.log(response);
+                window.location.href="${customerEditUrl}/"+data["id"]+"?message=error_system";
             }
         });
     }

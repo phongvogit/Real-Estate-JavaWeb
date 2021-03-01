@@ -4,8 +4,7 @@ import java.util.stream.Stream;
 
 public enum TransactionTypeEnum {
     CUSTOMER_SERVICE("Customer Service Process"),
-    HOUSE_VIEWING("House Viewing Process"),
-    PHONG("Phong");
+    HOUSE_VIEWING("House Viewing Process");
     private String fullName;
 
     TransactionTypeEnum(String fullName) {

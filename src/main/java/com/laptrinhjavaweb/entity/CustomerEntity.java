@@ -30,7 +30,7 @@ public class CustomerEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "userid", nullable = false))
     private List<UserEntity> users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<TransactionEntity> transactions = new ArrayList<>();
 
 

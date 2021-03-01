@@ -62,14 +62,11 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 //        //Building Type
         if(model.getBuildingTypes() != null && model.getBuildingTypes().length != 0){
             sql.append(" AND ( ");
-//            // Java 8
-        if(model.getBuildingTypes() != null && model.getBuildingTypes().length != 0){
             String sqlTypes = Arrays.stream(model.getBuildingTypes())
                     .map(item -> "b.type like '%"+ item +"%'")
                     .collect(Collectors.joining(" OR "));
             sql.append(sqlTypes);
             sql.append(" )");
-        }
         }
         return sql;
     }
@@ -83,7 +80,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                     if(!field.getName().equals("buildingTypes") && !field.getName().equals("staffId")
                             && !field.getName().startsWith("areaRent") && !field.getName().startsWith("costRent")
                             && !field.getName().startsWith("startPage") && !field.getName().startsWith("limit")
-                            && !field.getName().startsWith("currentPage")){
+                            && !field.getName().startsWith("currentPage") && !field.getName().startsWith("urlMapping")){
                         if(field.getType().getName().equals("java.lang.String")){
                             sql.append("AND b."+field.getName().toLowerCase()+" LIKE '%"+field.get(model)+"%' ");
                         } else if(field.getType().getName().equals("java.lang.Integer")){

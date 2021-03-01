@@ -89,15 +89,22 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "image")
     private String image;
 
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade={CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnoreProperties("building")
     private Set<RentAreaEntity> rentAreas = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany( fetch = FetchType.LAZY)
     @JoinTable(name = "assignmentbuilding",
             joinColumns = @JoinColumn(name = "buildingid"),
             inverseJoinColumns = @JoinColumn(name = "staffid"))
     private List<UserEntity> staffs = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "priority",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> users = new ArrayList<>();
+
 
     public String getName() {
         return name;
@@ -314,5 +321,13 @@ public class BuildingEntity extends BaseEntity {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 }

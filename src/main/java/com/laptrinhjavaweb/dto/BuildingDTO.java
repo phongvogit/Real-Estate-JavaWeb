@@ -288,4 +288,5 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
     public void setImage(String image) {
         this.image = image;
     }
+
 }

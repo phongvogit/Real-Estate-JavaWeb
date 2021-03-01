@@ -11,19 +11,20 @@ public class BaseDTO<T> implements Serializable {
 
     private Long[] staffIds;
     private Long staffId;
+    private String staffName;
     private Long[] ids;
     private Long id;
     private Date createdDate;
     private String createdBy;
     private Date modifiedDate;
     private String modifiedBy;
-    private int maxPageItems = 10;
-    private int page = 1;
+    private Integer startPage;
+    private Integer currentPage = 1;
     private List<T> listResult = new ArrayList<>();
-    private int totalItems = 0;
     private String tableId = "tableList";
-    private Integer limit;
+    private Integer limit = 5;
     private Integer totalPage;
+    private String urlMapping;
 
     public Long getId() {
         return id;
@@ -65,26 +66,6 @@ public class BaseDTO<T> implements Serializable {
         this.modifiedBy = modifiedBy;
     }
 
-    public int getTotalPages() {
-        return (int) Math.ceil((double) this.getTotalItems() / this.getMaxPageItems());
-    }
-
-    public int getMaxPageItems() {
-        return maxPageItems;
-    }
-
-    public void setMaxPageItems(int maxPageItems) {
-        this.maxPageItems = maxPageItems;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
     public List<T> getListResult() {
         return listResult;
     }
@@ -93,13 +74,6 @@ public class BaseDTO<T> implements Serializable {
         this.listResult = listResult;
     }
 
-    public int getTotalItems() {
-        return totalItems;
-    }
-
-    public void setTotalItems(int totalItems) {
-        this.totalItems = totalItems;
-    }
 
     public String getTableId() {
         return tableId;
@@ -146,5 +120,37 @@ public class BaseDTO<T> implements Serializable {
 
     public void setStaffIds(Long[] staffIds) {
         this.staffIds = staffIds;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public Integer getStartPage() {
+        return startPage;
+    }
+
+    public void setStartPage(Integer startPage) {
+        this.startPage = startPage;
+    }
+
+    public String getUrlMapping() {
+        return urlMapping;
+    }
+
+    public void setUrlMapping(String urlMapping) {
+        this.urlMapping = urlMapping;
     }
 }

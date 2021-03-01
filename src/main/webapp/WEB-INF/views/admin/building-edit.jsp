@@ -229,11 +229,9 @@
             dataType: "json",
             data: JSON.stringify(data),
             success: function (response) {
-                console.log("success");
                 window.location.href="${buildingListUrl}";
             },
             error:function (response) {
-                console.log('failed');
                 console.log(response);
             }
         });

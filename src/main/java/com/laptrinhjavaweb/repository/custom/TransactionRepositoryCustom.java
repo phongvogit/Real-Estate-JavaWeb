@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TransactionRepositoryCustom {
     List<TransactionEntity> getTransactionsByCustomerId(Long id);
+    void deleteTransactionByCustomerId(Long id);
 }

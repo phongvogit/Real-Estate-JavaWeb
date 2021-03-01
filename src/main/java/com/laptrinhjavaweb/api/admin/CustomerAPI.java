@@ -30,7 +30,6 @@ public class CustomerAPI {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setData(customerService.saveNewCustomer(model));
         responseDTO.setMessage("success");
-        responseDTO.setDetail("");
         return responseDTO;
     }
 
@@ -46,7 +45,6 @@ public class CustomerAPI {
     @DeleteMapping
     public ResponseDTO deleteCustomer(@RequestBody CustomerDTO model){
         ResponseDTO responseDTO = new ResponseDTO();
-
         customerService.deleteCustomer(model.getIds());
         responseDTO.setMessage("success");
         return responseDTO;

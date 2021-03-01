@@ -7,6 +7,8 @@ import com.laptrinhjavaweb.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 @RestController(value = "buildingAPIOfAdmin")
 @RequestMapping(value = "/api/building")
 public class BuildingAPI {
@@ -21,11 +23,17 @@ public class BuildingAPI {
         responseDTO.setMessage("success");
         return responseDTO;
     }
+    @PostMapping("/{buildingId}/priority")
+    public ResponseDTO addPriority(@PathVariable("buildingId") Long id){
+        ResponseDTO responseDTO = new ResponseDTO();
+        buildingService.addPriority(id);
+        responseDTO.setMessage("success");
+        return responseDTO;
+    }
 
     @PutMapping()
     public ResponseDTO updateBuilding(@RequestBody BuildingDTO buildingDTO){
         ResponseDTO responseDTO = new ResponseDTO();
-
         responseDTO.setData(buildingService.saveNewBuilding(buildingDTO));
         responseDTO.setMessage("success");
         return responseDTO;
@@ -36,6 +44,16 @@ public class BuildingAPI {
         ResponseDTO responseDTO = new ResponseDTO();
 
         buildingService.deleteBuilding(buildingDTO.getIds());
+        responseDTO.setMessage("success");
+        return responseDTO;
+    }
+
+    @DeleteMapping("/mylist")
+    public ResponseDTO deleteBuildingMyList(@RequestBody long[] ids) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (ids.length > 0) {
+            buildingService.deleteBuildingMyList(ids);
+        }
         responseDTO.setMessage("success");
         return responseDTO;
     }

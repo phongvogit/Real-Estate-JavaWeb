@@ -3,6 +3,7 @@
 <%@include file="/common/taglib.jsp"%>
 <c:url var="customerListURL" value="/admin/customer-list"/>
 <c:url var="customerEditURL" value="/admin/customer-edit"/>
+<c:url var="customerViewURL" value="/admin/customer-view"/>
 <c:url var="customerAPI" value="/api/customer" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -17,7 +18,7 @@
     <li class="breadcrumb-item"><a href="#">Customer</a></li>
     <li class="breadcrumb-item active" aria-current="page">List & Search</li>
 </div>
-<div class="widget-box">
+<div class="widget-box" style="background-image: none">
     <!-- Card -->
     <div class="card">
         <div class="card-header px-3 py-1">
@@ -52,24 +53,29 @@
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" id="maxPageItem" name="limit" value="5">
+                    <input type="hidden" id="page" name="currentPage" value="1">
                     <button type="submit" class="btn btn-success px-5 py-2" id="btnSearch">Search</button>
                 </form:form>
             </div>
         </div>
     </div>
     <!-- Sub-Btn -->
-    <div class="row sub-btn">
-        <div class="col-12">
-            <a type="button" class="btn btn-outline-dark" href="<c:url value='${customerEditURL}'/>" data-toggle="tooltip" title='Add more'>
-                <i class="fa fa-plus-circle" aria-hidden="true" style="color: black;"></i>
-            </a>
-            <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title='Delete' id="btnDelete">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
+    <security:authorize access="hasRole('MANAGER')">
+        <div class="row sub-btn">
+            <div class="col-12">
+                <a type="button" class="btn btn-outline-dark" href="<c:url value='${customerEditURL}'/>" data-toggle="tooltip" title='Add more'>
+                    <i class="fa fa-plus-circle" aria-hidden="true" style="color: black;"></i>
+                </a>
+                <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title='Delete' id="btnDelete">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
-    </div>
+    </security:authorize>
+
     <!-- Table-->
-    <div class="widget-table">
+    <div class="widget-table mb-1">
         <table class="table table-hover table-border">
             <thead>
             <tr>
@@ -82,7 +88,7 @@
             </tr>
             </thead>
             <tbody>
-                <c:forEach var="item" items="${customers}">
+                <c:forEach var="item" items="${customerResponse.customers}">
                  <form:form action="${customerEditURL}" commandName="modelSearch" method="GET">
                      <tr>
                          <th class="check-box"><input type="checkbox" id="" value="${item.id}"></th>
@@ -92,24 +98,29 @@
                          <td>${item.createdDate}</td>
                          <input type="hidden" value="${item.id}" name="id">
                          <td>
-                             <button type="button" class="btn btn-info" data-toggle="modal" onclick="assignmentCustomer(${item.id})" data-target="#exampleModal">
-                                 <i class="fa fa-eye" aria-hidden="true"></i>
-                             </button>
-                             <button type="submit" class="btn btn-info" data-toggle="modal" title='Update'>
+                             <security:authorize access="hasRole('MANAGER')">
+                                 <button type="button" class="btn btn-info" data-toggle="modal" onclick="assignmentCustomer(${item.id})" data-target="#exampleModal">
+                                     <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                 </button>
+                             </security:authorize>
+                             <a type="submit" class="btn btn-info"  title='Update' href="${customerEditURL}/${item.id}">
                                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                             </button>
-                                 <%--                        <button type="button" class="btn btn-info" data-toggle="modal" title='Add more'>--%>
-                                 <%--                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>--%>
-                                 <%--                        </button>--%>
-                                 <%--                        <button type="button" class="btn btn-info" data-toggle="modal" title='Add more'>--%>
-                                 <%--                            <i class="fa fa-plus" aria-hidden="true"></i>--%>
-                                 <%--                        </button>--%>
+                             </a>
+                             <a type="button" class="btn btn-info" title='See more' href= "${customerViewURL}/${item.id}">
+                                 <i class="fa fa-eye" aria-hidden="true"></i>
+                             </a>
                          </td>
                      </tr>
                  </form:form>
             </c:forEach>
             </tbody>
         </table>
+    </div>
+    <div class="bg-white text-center mx-auto" style="width: 250px">
+        <nav aria-label="Page navigation example mx-auto ">
+            <ul class="pagination" id="pagination">
+            </ul>
+        </nav>
     </div>
 </div>
 <!-- Modal -->
@@ -136,6 +147,25 @@
 <!-- Sub-script-->
 <!-- Sub-script-->
 <script>
+    var totalPages = ${customerResponse.totalPage};
+    var currentPage = ${customerResponse.page};
+    var limit = 5;
+    $(function () {
+        window.pagObj = $('#pagination').twbsPagination({
+            totalPages: totalPages,
+            visiblePages: 5,
+            startPage: currentPage,
+            onPageClick: function (event, page) {
+                if(currentPage != page){
+                    $('#maxPageItem').val(limit);
+                    $('#page').val(page);
+                    $('#listForm').submit();
+                }
+            }
+        }).on('page', function (event, page) {
+            console.info(page + ' (from event listening)');
+        });
+    });
     $(document).ready(function(){
         $("#chevron").click(function(){
             $("#chevron").toggleClass("fa-chevron-up fa-chevron-down");
@@ -157,6 +187,13 @@
                 $(".check-box input").removeAttr("checked");
             }
         });
+        $(document).keypress(function(e) {
+            if (e.which == 13) {
+                $('#listForm').attr('action', '${searchURL}');
+                $('#listForm').submit();
+                return false;
+            }
+        });
     });
 
     $("#btnDelete").click(function() {
@@ -165,7 +202,10 @@
             return $(this).val();
         }).get();
         data['ids'] = ids;
-        deleteNew(data);
+        var result = confirm("Want to Delete");
+        if(result){
+            deleteNew(data);
+        }
     });
 
     function deleteNew(data) {

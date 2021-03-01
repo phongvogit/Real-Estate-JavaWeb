@@ -21,6 +21,7 @@ public class SystemConstant {
     public static final String STAFF_ROLE = "ROLE_STAFF";
     public static final String HOME = "/trang-chu";
     public static final String ADMIN_HOME = "/admin/home";
+    public static final String ADMIN_BUILDING_ASSIGNMENT = "/admin/building-assignment";
     public static final String MODEL = "model";
     public static final String INSERT_SUCCESS = "insert_success";
     public static final String UPDATE_SUCCESS = "update_success";
@@ -47,10 +48,4 @@ public class SystemConstant {
 
     public static final String TALK_SEO_URL = "tam-su";
     public static final String CATEGORIES = "categories";
-
-    //Dítrict
-    public static final String districtName = "Quận 1,Quận 2,Quận Thủ Đức,Quận Bình Thạnh,Quận Tân Bình";
-    public static final String districtCode = "district-1,district-2,thu-duc,binh-thanh,tan-binh";
-    public static final String buildingTypeName = "Ground Floor,Detached House,Furnished House";
-    public static final String buildingTypeCode = "ground-floor,detached-house,furnished-house";
 }

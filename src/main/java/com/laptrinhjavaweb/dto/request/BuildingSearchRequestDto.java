@@ -1,6 +1,8 @@
 package com.laptrinhjavaweb.dto.request;
 
-public class BuildingSearchRequestDto {
+import com.laptrinhjavaweb.dto.BaseDTO;
+
+public class BuildingSearchRequestDto extends BaseDTO<BuildingSearchRequestDto> {
     private String name;
     private Integer numberOfBasement;
     private Integer floorArea;
@@ -14,20 +16,9 @@ public class BuildingSearchRequestDto {
     private Integer costRentTo;
     private String managerName;
     private String managerPhone;
-    private Integer staffId;
     private String[] buildingTypes;
-    private Integer limit = 5;
-    private Integer startPage;
-    private Integer currentPage = 1;
+    private String urlMapping;
 
-
-    public Integer getLimit() {
-        return limit;
-    }
-
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
 
     public Integer getFloorArea() {
         return floorArea;
@@ -117,14 +108,6 @@ public class BuildingSearchRequestDto {
         this.managerPhone = managerPhone;
     }
 
-    public Integer getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(Integer staffId) {
-        this.staffId = staffId;
-    }
-
     public String[] getBuildingTypes() {
         return buildingTypes;
     }
@@ -149,19 +132,12 @@ public class BuildingSearchRequestDto {
         this.numberOfBasement = numberOfBasement;
     }
 
-    public Integer getStartPage() {
-        return startPage;
+
+    public String getUrlMapping() {
+        return urlMapping;
     }
 
-    public void setStartPage(Integer startPage) {
-        this.startPage = startPage;
-    }
-
-    public Integer getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
+    public void setUrlMapping(String urlMapping) {
+        this.urlMapping = urlMapping;
     }
 }

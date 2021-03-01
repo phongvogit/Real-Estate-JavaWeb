@@ -2,15 +2,19 @@ package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.Enums.BuildingTypeEnum;
 import com.laptrinhjavaweb.Enums.DistrictEnum;
+import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
+import com.laptrinhjavaweb.dto.PageDTO;
 import com.laptrinhjavaweb.dto.request.BuildingSearchRequestDto;
 import com.laptrinhjavaweb.dto.response.BuildingPageResponseDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
+import com.laptrinhjavaweb.entity.UserEntity;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
+import com.laptrinhjavaweb.security.utils.SecurityUtils;
 import com.laptrinhjavaweb.service.IBuildingService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +35,27 @@ public class BuildingService implements IBuildingService {
     @Autowired
     private BuildingConverter buildingConverter;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Override
     @Transactional
     public BuildingDTO saveNewBuilding(BuildingDTO model ) {
+        BuildingEntity buildingEntity = buildingConverter.convertToEntity(model);
+        if(model.getId() != null){
+            BuildingEntity existBuilding = buildingRepository.findOne(model.getId());
+            buildingEntity.setCreatedBy(existBuilding.getCreatedBy());
+            buildingEntity.setCreatedDate(existBuilding.getCreatedDate());
+            buildingEntity.setStaffs(existBuilding.getStaffs());
+        }
         //BuildingTypes
         if(model.getBuildingTypes() != null && model.getBuildingTypes().length != 0)
             model.setType(String.join(",", model.getBuildingTypes()));
-        BuildingEntity buildingEntity = buildingConverter.convertToEntity(model);
         buildingEntity = saveRentArea( buildingEntity, model);
         //Saved Building
         BuildingDTO result = buildingConverter.convertToDto(buildingRepository.save(buildingEntity));
-         return result;
+        return result;
     }
 
     private BuildingEntity saveRentArea(BuildingEntity buildingEntity, BuildingDTO model){
@@ -67,15 +80,28 @@ public class BuildingService implements IBuildingService {
     }
 
     @Override
+    @Transactional
     public void deleteBuilding(Long[] ids) {
-        for(Long i : ids){
-            buildingRepository.delete(i);
+        for(Long id : ids){
+            BuildingEntity building = buildingRepository.findOne(id);
+            rentAreaRepository.deleteBuildingId(building.getId());
+            for(UserEntity userEntity : building.getStaffs()){
+                userEntity.getBuildings().remove(building);
+            }
+            for(UserEntity userEntity : building.getUsers()){
+                userEntity.getBuildingPriorities().remove(userEntity);
+            }
+            buildingRepository.delete(building);
         }
     }
 
     @Override
     public BuildingPageResponseDTO findAll(BuildingSearchRequestDto model) {
         List<BuildingDTO> buildings = new ArrayList<>();
+        if(model.getUrlMapping().equals(SystemConstant.ADMIN_BUILDING_ASSIGNMENT)){
+            model.setStaffName(SecurityUtils.getPrincipal().getUsername());
+            model.setStaffId(userRepository.findByUserName(model.getStaffName()).getId());
+        }
         model.setStartPage((model.getCurrentPage() - 1) * model.getLimit());
         for(BuildingEntity item : buildingRepository.findAll(model)){
             BuildingDTO buildingDTO = buildingConverter.convertToDto(item);
@@ -112,6 +138,26 @@ public class BuildingService implements IBuildingService {
         return new BuildingDTO();
     }
 
+    @Override
+    public BuildingPageResponseDTO findAllBuildingPriorities(PageDTO page) {
+        BuildingPageResponseDTO result = new BuildingPageResponseDTO();
+        UserEntity userEntity = userRepository.findByUserName(SecurityUtils.getPrincipal().getUsername());
+        int total = userEntity.getBuildingPriorities().size();
+        int start = (page.getPage() - 1) * page.getMaxItems();
+        int limit = start + page.getMaxItems();
+        if(total < limit){
+            limit = total;
+        }
+        for(int i = start; i < limit; i++){
+            BuildingDTO buildingDTO = buildingConverter.convertToDto(userEntity.getBuildingPriorities().get(start));
+            result.getBuildings().add(buildingDTO);
+            start++;
+        }
+        result.setTotalPage((int)Math.ceil((total * 1.0) / page.getMaxItems()));
+        result.setPage(page.getPage());
+        return result;
+    }
+
     // District && BuildingTypes
     @Override
     public Map<String, String> getAllDistricts() {
@@ -126,5 +172,24 @@ public class BuildingService implements IBuildingService {
         EnumSet.allOf(BuildingTypeEnum.class)
                 .forEach(item -> results.put(item.toString(), item.getBuildingTypeName()));
         return results;
+    }
+
+    @Override
+    public void addPriority(Long id) {
+        UserEntity user = userRepository.findByUserName(SecurityUtils.getPrincipal().getUsername());
+        BuildingEntity buildingEntity = buildingRepository.findOne(id);
+        buildingEntity.getUsers().add(user);
+        buildingRepository.save(buildingEntity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteBuildingMyList(long[] ids) {
+        UserEntity userEntity = userRepository.findByUserName(SecurityUtils.getPrincipal().getUsername());
+        for(long id : ids){
+            BuildingEntity buildingEntity = buildingRepository.findOne(id);
+            userEntity.getBuildingPriorities().remove(buildingEntity);
+            buildingEntity.getUsers().remove(userEntity);
+        }
     }
 }
