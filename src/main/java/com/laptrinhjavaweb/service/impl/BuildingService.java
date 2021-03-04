@@ -106,6 +106,7 @@ public class BuildingService implements IBuildingService {
                 , new PageRequest(model.getCurrentPage(), model.getLimit()));
         for(BuildingEntity item : buildingEntities){
             BuildingDTO buildingDTO = buildingConverter.convertToDto(item);
+            buildingDTO.setCreatedDateShowing(convertDateFormat(buildingDTO.getCreatedDate().toString().split(" ")[0]));
             buildings.add(buildingDTO);
         }
         BuildingPageResponseDTO result = new BuildingPageResponseDTO();
@@ -114,6 +115,11 @@ public class BuildingService implements IBuildingService {
         result.setTotalPage((int) Math.ceil(buildingRepository.count() * 1.0 / model.getLimit()));
         return result;
     }
+    private String convertDateFormat(String date){
+        String[] arr = date.split("-");
+        return arr[2] + "/"+ arr[1] +"/"+ arr[0];
+    }
+
     private BuildingBuilder getBuildingBuilder(BuildingDTO model){
         return new BuildingBuilder.Builder()
                 .setName(model.getName())

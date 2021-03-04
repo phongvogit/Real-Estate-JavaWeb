@@ -43,7 +43,15 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
     private List<UserEntity> staffs = new ArrayList<>();
     private Boolean checkUpdate = false;
     private String image;
+    private String createdDateShowing;
 
+    public String getCreatedDateShowing() {
+        return createdDateShowing;
+    }
+
+    public void setCreatedDateShowing(String createdDateShowing) {
+        this.createdDateShowing = createdDateShowing;
+    }
     public Integer getCostRentFrom() {
         return costRentFrom;
     }

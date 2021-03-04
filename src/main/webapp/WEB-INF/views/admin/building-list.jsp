@@ -154,6 +154,7 @@
                 <thead>
                 <tr>
                     <th scope="col"><input type="checkbox" id="check-all"></th>
+                    <th scope="col">Date</th>
                     <th scope="col">Product's name</th>
                     <th scope="col">Manager's name</th>
                     <th scope="col">Street</th>
@@ -167,6 +168,7 @@
                     <form action="${buildingEditURL}/${item.id}" commandName="modelSearch" method="get">
                         <tr >
                             <th class="check-box"><input type="checkbox" value="${item.id}"></th>
+                            <td>${item.createdDateShowing}</td>
                             <td>${item.name}</td>
                             <td>${item.managerName}</td>
                             <td>${item.street}</td>

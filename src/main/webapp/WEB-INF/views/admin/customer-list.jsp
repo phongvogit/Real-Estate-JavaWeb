@@ -95,7 +95,7 @@
                          <td>${item.fullName}</td>
                          <td>${item.demand}</td>
                          <td>${item.createdBy}</td>
-                         <td>${item.createdDate}</td>
+                         <td>${item.createdDateShowing}</td>
                          <input type="hidden" value="${item.id}" name="id">
                          <td>
                              <security:authorize access="hasRole('MANAGER')">

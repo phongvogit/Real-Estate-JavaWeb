@@ -11,6 +11,7 @@ public class CustomerDTO extends BaseDTO<CustomerDTO> {
     private boolean enable;
     private Timestamp createdDate;
     private String createdBy;
+    private String createdDateShowing;
 
     public Timestamp getCreatedDate() {
         return createdDate;
@@ -68,5 +69,13 @@ public class CustomerDTO extends BaseDTO<CustomerDTO> {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public String getCreatedDateShowing() {
+        return createdDateShowing;
+    }
+
+    public void setCreatedDateShowing(String createdDateShowing) {
+        this.createdDateShowing = createdDateShowing;
     }
 }

@@ -1,6 +1,7 @@
 package com.laptrinhjavaweb.dto;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,9 +15,9 @@ public class BaseDTO<T> implements Serializable {
     private String staffName;
     private Long[] ids;
     private Long id;
-    private Date createdDate;
+    private Timestamp createdDate;
     private String createdBy;
-    private Date modifiedDate;
+    private Timestamp modifiedDate;
     private String modifiedBy;
     private Integer startPage;
     private Integer currentPage = 1;
@@ -34,14 +35,6 @@ public class BaseDTO<T> implements Serializable {
         this.id = id;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public String getCreatedBy() {
         return createdBy;
     }
@@ -50,11 +43,19 @@ public class BaseDTO<T> implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public Date getModifiedDate() {
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Timestamp getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(Date modifiedDate) {
+    public void setModifiedDate(Timestamp modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 

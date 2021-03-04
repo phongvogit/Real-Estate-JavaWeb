@@ -230,6 +230,7 @@
             });
         data["buildingTypes"] = buildingTypes;
         var id = $('#id').val();
+        data["id"] = id;
         if(checkImageClicked){
             data["image"] = saveFile();
         }else {
@@ -281,11 +282,11 @@
             data: JSON.stringify(data),
             success: function (response) {
                 console.log("success");
-                window.location.href="${buildingEditUrl}/-1?message=insert_success";
+                window.location.href="${buildingEditUrl}?message=insert_success";
             },
             error:function (response) {
                 console.log('failed');
-                window.location.href="${buildingEditUrl}/-1?message=error_system";
+                window.location.href="${buildingEditUrl}?message=error_system";
             }
         });
     }
@@ -297,10 +298,10 @@
             dataType: "json",
             data: JSON.stringify(data),
             success: function (response) {
-                window.location.href="${buildingListUrl}";
+                window.location.href="${buildingEditUrl}/"+data["id"]+"?message=update_success";
             },
             error:function (response) {
-                console.log(response);
+                window.location.href="${buildingEditUrl}/"+data["id"]+"?message=error_system";
             }
         });
     }

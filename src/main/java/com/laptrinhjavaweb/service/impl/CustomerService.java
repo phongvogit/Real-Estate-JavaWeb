@@ -40,6 +40,13 @@ public class CustomerService implements ICustomerService {
         if(model.getStaffIds() != null){
             customerEntity = setStaffList(customerEntity, model);
         }
+        if(model.getId() != null){
+            CustomerEntity oldCustomer = custumerRepository.findOne(model.getId());
+            customerEntity.setCreatedBy(oldCustomer.getCreatedBy());
+            customerEntity.setCreatedDate(oldCustomer.getCreatedDate());
+            customerEntity.setUsers(oldCustomer.getUsers());
+            customerEntity.setTransactions(oldCustomer.getTransactions());
+        }
         return customerConverter.convertToDto(custumerRepository.save(customerEntity));
     }
 
@@ -75,11 +82,18 @@ public class CustomerService implements ICustomerService {
         CustomerPageResponseDTO result = new CustomerPageResponseDTO();
         model.setStartPage((model.getCurrentPage() - 1) * model.getLimit());
         for(CustomerEntity item : custumerRepository.findAll(model)){
-            result.getCustomers().add(customerConverter.convertToDto(item));
+            CustomerDTO customerDTO = customerConverter.convertToDto(item);
+            customerDTO.setCreatedDateShowing(convertDateFormat(item.getCreatedDate().toString().split(" ")[0]));
+            result.getCustomers().add(customerDTO);
         }
         result.setPage(model.getCurrentPage());
         result.setTotalPage((int) Math.ceil(custumerRepository.count() * 1.0 / model.getLimit()));
        return result;
+    }
+
+    private String convertDateFormat(String date){
+        String[] arr = date.split("-");
+        return arr[2] + "/"+ arr[1] +"/"+ arr[0];
     }
 
     @Override
