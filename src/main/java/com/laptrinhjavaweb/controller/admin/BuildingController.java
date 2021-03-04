@@ -26,10 +26,11 @@ public class BuildingController {
     private IUserService userService;
 
     @RequestMapping(value = {"/admin/building-list","/admin/building-assignment"}, method = RequestMethod.GET)
-    public ModelAndView buildingList(@ModelAttribute("modelSearch") BuildingSearchRequestDto model, HttpServletRequest request) {
+    public ModelAndView buildingList(@ModelAttribute("modelSearch") BuildingDTO model, HttpServletRequest request) {
           ModelAndView mav = new ModelAndView("admin/building-list");
         model.setUrlMapping(request.getServletPath());
         mav.addObject("buildingResponse", buildingService.findAll(model));
+        mav.addObject("modelSearch", new BuildingDTO());
         mav.addObject("staffmaps", userService.getStaffMaps());
         mav.addObject("districtmaps", buildingService.getAllDistricts());
         mav.addObject("buildingTypeMaps", buildingService.getAllBuildingTypes());

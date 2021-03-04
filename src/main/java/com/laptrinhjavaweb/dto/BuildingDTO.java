@@ -16,10 +16,12 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
     private Integer numberOfBasement;
     private Integer floorArea;
     private String direction;
-    private String rank;
+    private String level;
     private String rentAreaDescription;
     private String district;
     private Integer rentCost;
+    private Integer costRentFrom;
+    private Integer costRentTo;
     private String costDescription;
     private String serviceCost;
     private String carCost;
@@ -34,20 +36,29 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
     private String managerName;
     private String managerPhone;
     private String rentArea;
+    private Integer areaRentFrom;
+    private Integer areaRentTo;
     private List<RentAreaEntity> rentAreas = new ArrayList<>();
     private String staffString;
     private List<UserEntity> staffs = new ArrayList<>();
     private Boolean checkUpdate = false;
     private String image;
 
-    public String[] getBuildingTypes() {
-        return buildingTypes;
+    public Integer getCostRentFrom() {
+        return costRentFrom;
     }
 
-    public void setBuildingTypes(String[] buildingType) {
-        this.buildingTypes = buildingType;
+    public void setCostRentFrom(Integer costRentFrom) {
+        this.costRentFrom = costRentFrom;
     }
 
+    public Integer getCostRentTo() {
+        return costRentTo;
+    }
+
+    public void setCostRentTo(Integer costRentTo) {
+        this.costRentTo = costRentTo;
+    }
 
     public String getRentArea() {
         return rentArea;
@@ -55,6 +66,30 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
 
     public void setRentArea(String rentArea) {
         this.rentArea = rentArea;
+    }
+
+    public Integer getAreaRentFrom() {
+        return areaRentFrom;
+    }
+
+    public void setAreaRentFrom(Integer areaRentFrom) {
+        this.areaRentFrom = areaRentFrom;
+    }
+
+    public Integer getAreaRentTo() {
+        return areaRentTo;
+    }
+
+    public void setAreaRentTo(Integer areaRentTo) {
+        this.areaRentTo = areaRentTo;
+    }
+
+    public String[] getBuildingTypes() {
+        return buildingTypes;
+    }
+
+    public void setBuildingTypes(String[] buildingType) {
+        this.buildingTypes = buildingType;
     }
 
     public String getName() {
@@ -257,12 +292,12 @@ public class BuildingDTO extends BaseDTO<BuildingDTO>{
         this.checkUpdate = checkUpdate;
     }
 
-    public String getRank() {
-        return rank;
+    public String getLevel() {
+        return level;
     }
 
-    public void setRank(String rank) {
-        this.rank = rank;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public List<UserEntity> getStaffs() {

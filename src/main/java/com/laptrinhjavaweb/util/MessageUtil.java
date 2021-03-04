@@ -23,6 +23,6 @@ public class MessageUtil {
 			result.put("message", "Error system");
 			result.put("alert", "danger");
 		}
-		return result;
+ 		return result;
 	}
 }

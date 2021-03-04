@@ -3,6 +3,7 @@
 <%@include file="/common/taglib.jsp"%>
 <c:url var="URLBuildingPriorities" value="/admin/priority/list"/>
 <c:url var="customerListURL" value="/admin/customer-list"/>
+<c:url var="userListURL" value="/admin/user/list"/>
 <c:url var="buildingListURL" value="/admin/building-list"/>
 <c:url var="buildingAssignmentURL" value="/admin/building-assignment"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -41,7 +42,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="${URLBuildingPriorities}"><i class="fa fa-list-alt" aria-hidden="true"></i>My List</a>
             </li>
-
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-users" aria-hidden="true"></i>Account
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                    <a class="dropdown-item"  href="${userListURL}">Account List</a>
+                </div>
+            </li>
             <li class="nav-item dropdown log-out-nav">
                 <div class="col-12">
                     <a class="dropdown-item" href="#"><i class="ace-icon fa fa-power-off"></i>Logout</a>

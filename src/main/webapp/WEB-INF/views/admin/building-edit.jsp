@@ -25,12 +25,10 @@
         <div class="row">
             <div class="col-md-6">
                 <h5>Product's Name</h5>
-<%--                <input  value="" name="name" class="form-control" aria-describedby="emailHelp" placeholder="Enter Product's Name">--%>
                 <form:input path="name" cssClass="form-control" placeholder="Enter Product's Name" />
             </div>
             <div class="col-md-6">
                 <h5>Gross Floor Area(GFA)</h5>
-<%--                <input  class="form-control" aria-describedby="emailHelp" placeholder="Enter GFA">--%>
                 <form:input path="floorArea" cssClass="form-control" placeholder="Enter GFA" />
             </div>
         </div>
@@ -46,46 +44,116 @@
             </div>
             <div class="col-md-4">
                 <h5>Ward</h5>
-<%--                <input  class="form-control"  aria-describedby="emailHelp" placeholder="Enter Ward">--%>
                 <form:input path="ward" cssClass="form-control"  placeholder="Enter ward"/>
             </div>
             <div class="col-md-4">
                 <h5>Street</h5>
-<%--                <input  class="form-control" aria-describedby="emailHelp" placeholder="Enter Street">--%>
                 <form:input path="street" cssClass="form-control"  placeholder="Enter Street"/>
             </div>
         </div>
     </div>
     <div class="form-group">
         <div class="row">
-            <div class="col-md-5">
-                <h5>Number of Basements</h5>
-<%--                <input  class="form-control" aria-describedby="emailHelp" placeholder="Enter Basement Quantity">--%>
-                <form:input path="numberOfBasement" cssClass="form-control"  />
-            </div>
-<%--            <div class="col-md-5">--%>
-<%--                <h5>Direction</h5>--%>
-<%--&lt;%&ndash;                <input  class="form-control" aria-describedby="emailHelp" placeholder="Enter Direction">&ndash;%&gt;--%>
-<%--                <form:input path="direction" cssClass="form-control" placeholder="Enter Direction"/>--%>
-<%--            </div>--%>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
             <div class="col-md-4">
                 <h5>Area</h5>
-<%--                <input  class="form-control" aria-describedby="emailHelp" placeholder="50" value="" name="area">--%>
                 <form:input path="rentArea" id="rentArea" cssClass="form-control" placeholder="100, 200, 300"/>
                 <p id="errorRentArea" class="text-dange"><p>
             </div>
             <div class="col-md-4">
                 <h5>Rental Price</h5>
-<%--                <input  class="form-control" aria-describedby="emailHelp" placeholder="250.000 euros">--%>
                 <form:input path="rentCost" cssClass="form-control" placeholder="250.000 euros"/>
             </div>
             <div class="col-md-4">
                 <h5>Service Fee</h5>
                 <form:input path="serviceCost" cssClass="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Number of Basements</h5>
+                <form:input path="numberOfBasement" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Deposit</h5>
+                <form:input path="deposit" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Payment</h5>
+                <form:input path="payment" cssClass="form-control"  />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Car Cost</h5>
+                <form:input path="carCost" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Motor Cost</h5>
+                <form:input path="motorCost" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Overtime Cost</h5>
+                <form:input path="overtimeCost" cssClass="form-control"  />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Service Cost</h5>
+                <form:input path="serviceCost" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Electric Bill</h5>
+                <form:input path="electricBill" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Direction</h5>
+                <form:input path="direction" cssClass="form-control"  />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Cost Description</h5>
+                <form:input path="costDescription" cssClass="form-control"  />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Rent Area Description</h5>
+                <form:input path="rentAreaDescription" cssClass="form-control"  />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Structure</h5>
+                <form:input path="structure" cssClass="form-control"  />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Time Rent</h5>
+                <form:input path="timeRent" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Level</h5>
+                <form:input path="level" cssClass="form-control"  />
+            </div>
+            <div class="col-md-4">
+                <h5>Time Decoration</h5>
+                <form:input path="timeDecoration" cssClass="form-control"  />
             </div>
         </div>
     </div>

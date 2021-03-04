@@ -1,5 +1,7 @@
 package com.laptrinhjavaweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +28,14 @@ UserEntity extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "address")
     private String address;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnoreProperties("users")
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false))
@@ -46,13 +52,6 @@ UserEntity extends BaseEntity {
     private List<BuildingEntity> buildings = new ArrayList<>();
 
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getFullName() {
         return fullName;
@@ -128,5 +127,21 @@ UserEntity extends BaseEntity {
 
     public void setBuildingPriorities(List<BuildingEntity> buildingPriorities) {
         this.buildingPriorities = buildingPriorities;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

@@ -2,21 +2,21 @@ package com.laptrinhjavaweb.service.impl;
 
 import com.laptrinhjavaweb.Enums.BuildingTypeEnum;
 import com.laptrinhjavaweb.Enums.DistrictEnum;
+import com.laptrinhjavaweb.builder.BuildingBuilder;
 import com.laptrinhjavaweb.constant.SystemConstant;
 import com.laptrinhjavaweb.converter.BuildingConverter;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.PageDTO;
-import com.laptrinhjavaweb.dto.request.BuildingSearchRequestDto;
 import com.laptrinhjavaweb.dto.response.BuildingPageResponseDTO;
 import com.laptrinhjavaweb.entity.BuildingEntity;
 import com.laptrinhjavaweb.entity.RentAreaEntity;
 import com.laptrinhjavaweb.entity.UserEntity;
+import com.laptrinhjavaweb.page.PageRequest;
 import com.laptrinhjavaweb.repository.RentAreaRepository;
 import com.laptrinhjavaweb.repository.BuildingRepository;
 import com.laptrinhjavaweb.repository.UserRepository;
 import com.laptrinhjavaweb.security.utils.SecurityUtils;
 import com.laptrinhjavaweb.service.IBuildingService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +51,7 @@ public class BuildingService implements IBuildingService {
         }
         //BuildingTypes
         if(model.getBuildingTypes() != null && model.getBuildingTypes().length != 0)
-            model.setType(String.join(",", model.getBuildingTypes()));
+            buildingEntity.setType(String.join(",", model.getBuildingTypes()));
         buildingEntity = saveRentArea( buildingEntity, model);
         //Saved Building
         BuildingDTO result = buildingConverter.convertToDto(buildingRepository.save(buildingEntity));
@@ -96,14 +96,15 @@ public class BuildingService implements IBuildingService {
     }
 
     @Override
-    public BuildingPageResponseDTO findAll(BuildingSearchRequestDto model) {
+    public BuildingPageResponseDTO findAll(BuildingDTO model) {
         List<BuildingDTO> buildings = new ArrayList<>();
         if(model.getUrlMapping().equals(SystemConstant.ADMIN_BUILDING_ASSIGNMENT)){
             model.setStaffName(SecurityUtils.getPrincipal().getUsername());
             model.setStaffId(userRepository.findByUserName(model.getStaffName()).getId());
         }
-        model.setStartPage((model.getCurrentPage() - 1) * model.getLimit());
-        for(BuildingEntity item : buildingRepository.findAll(model)){
+        List<BuildingEntity> buildingEntities = buildingRepository.findAll(getBuildingBuilder(model)
+                , new PageRequest(model.getCurrentPage(), model.getLimit()));
+        for(BuildingEntity item : buildingEntities){
             BuildingDTO buildingDTO = buildingConverter.convertToDto(item);
             buildings.add(buildingDTO);
         }
@@ -112,6 +113,28 @@ public class BuildingService implements IBuildingService {
         result.setPage(model.getCurrentPage());
         result.setTotalPage((int) Math.ceil(buildingRepository.count() * 1.0 / model.getLimit()));
         return result;
+    }
+    private BuildingBuilder getBuildingBuilder(BuildingDTO model){
+        return new BuildingBuilder.Builder()
+                .setName(model.getName())
+                .setAreaFrom(model.getAreaRentFrom())
+                .setAreaTo(model.getAreaRentTo())
+                .setNumberOfBasement(model.getNumberOfBasement())
+                .setFloorArea(model.getFloorArea())
+                .setCostFrom(model.getCostRentFrom())
+                .setCostTo(model.getCostRentTo())
+                .setDirection(model.getDirection())
+                .setDistrict(model.getDistrict())
+                .setLevel(model.getLevel())
+                .setManagerName(model.getManagerName())
+                .setManagerPhone(model.getManagerPhone())
+                .setWard(model.getWard())
+                .setStreet(model.getStreet())
+                .setStaffName(model.getStaffName())
+                .setCreatedBy(model.getCreatedBy())
+                .setStaffId(model.getStaffId())
+                .setTypes(model.getBuildingTypes())
+                .build();
     }
 
     @Override

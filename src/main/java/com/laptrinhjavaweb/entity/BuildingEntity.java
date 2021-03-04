@@ -77,8 +77,8 @@ public class BuildingEntity extends BaseEntity {
     @Column(name = "timerent")
     private String timeRent;
 
-    @Column(name = "timedecorator")
-    private String timeDecorator;
+    @Column(name = "timedecoration")
+    private String timeDecoration;
 
     @Column(name = "managername")
     private String managerName;
@@ -266,12 +266,12 @@ public class BuildingEntity extends BaseEntity {
         this.timeRent = timeRent;
     }
 
-    public String getTimeDecorator() {
-        return timeDecorator;
+    public String getTimeDecoration() {
+        return timeDecoration;
     }
 
-    public void setTimeDecorator(String timeDecorator) {
-        this.timeDecorator = timeDecorator;
+    public void setTimeDecoration(String timeDecoration) {
+        this.timeDecoration = timeDecoration;
     }
 
     public String getManagerName() {

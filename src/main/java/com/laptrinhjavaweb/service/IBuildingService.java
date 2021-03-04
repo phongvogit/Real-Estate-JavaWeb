@@ -2,10 +2,8 @@ package com.laptrinhjavaweb.service;
 
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.PageDTO;
-import com.laptrinhjavaweb.dto.request.BuildingSearchRequestDto;
 import com.laptrinhjavaweb.dto.response.BuildingPageResponseDTO;
 
-import java.util.List;
 import java.util.Map;
 
 public interface IBuildingService {
@@ -14,7 +12,7 @@ public interface IBuildingService {
     // Delete
     void deleteBuilding(Long[] ids);
     // !Find
-    BuildingPageResponseDTO findAll(BuildingSearchRequestDto model);
+    BuildingPageResponseDTO findAll(BuildingDTO model);
     BuildingDTO findBuildingById(Long id);
     BuildingPageResponseDTO findAllBuildingPriorities(PageDTO pageDTO);
 
