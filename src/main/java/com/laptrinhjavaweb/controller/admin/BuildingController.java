@@ -70,6 +70,7 @@ public class BuildingController {
         mav.addObject("buildingTypeMaps", buildingService.getAllBuildingTypes());
         return mav;
     }
+
     @RequestMapping(value = "/admin/priority/list", method = RequestMethod.GET)
     public ModelAndView showBuildingPriority(@ModelAttribute("model")PageDTO page) {
         ModelAndView mav = new ModelAndView("admin/priority/list");

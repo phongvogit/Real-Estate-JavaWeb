@@ -47,4 +47,11 @@ public class UserController {
         }
         return mav;
     }
+
+    @RequestMapping(value = "/admin/user/view/{userId}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable("userId") Long id) {
+        ModelAndView mav = new ModelAndView("admin/user/view");
+        mav.addObject("user", userService.findOneByUserId(id));
+        return mav;
+    }
 }

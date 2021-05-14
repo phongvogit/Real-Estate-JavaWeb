@@ -3,6 +3,7 @@
 <%@include file="/common/taglib.jsp"%>
 <c:url var="userEdit" value="/admin/user/edit"/>
 <c:url var="userList" value="/admin/user/list"/>
+<c:url var="userView" value="/admin/user/view"/>
 <c:url var="userAPI" value="/api/user"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -70,17 +71,9 @@
                                     <p>No Authorization</p>
                                 </c:if>
                             </c:forEach>
-<%--                            <security:authorize access="hasRole('MANAGER')">--%>
-<%--                                <button type="button" class="btn btn-info" data-toggle="modal" onclick="assignmentCustomer(${item.id})" data-target="#exampleModal">--%>
-<%--                                    <i class="fa fa-newspaper-o" aria-hidden="true"></i>--%>
-<%--                                </button>--%>
-<%--                            </security:authorize>--%>
-<%--                            <a type="submit" class="btn btn-info"  title='Update' href="${customerEditURL}/${item.id}">--%>
-<%--                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>--%>
-<%--                            </a>--%>
-<%--                            <a type="button" class="btn btn-info" title='See more' href= "${customerViewURL}/${item.id}">--%>
-<%--                                <i class="fa fa-eye" aria-hidden="true"></i>--%>
-<%--                            </a>--%>
+                            <a type="button" class="btn btn-info" title='See more' href= "${userView}/${item.id}">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
                         </td>
                     </tr>
             </c:forEach>

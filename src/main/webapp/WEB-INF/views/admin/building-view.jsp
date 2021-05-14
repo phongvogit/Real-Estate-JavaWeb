@@ -40,6 +40,27 @@
                         <td>${building.street}</td>
                     </tr>
                     <tr>
+                        <td>Rent Area</td>
+                        <td>${building.rentArea}</td>
+                    </tr>
+                    <tr>
+                        <td>BuildingTypes</td>
+                        <td>
+                            <c:forEach var="item" items="${buildingTypeMaps}">
+                                <div>
+                                    <input type="checkbox"
+                                        <c:forEach var="type" items="${building.buildingTypes}">
+                                            <c:if test="${type == item.key}">
+                                                checked
+                                            </c:if>
+                                        </c:forEach>
+                                        >
+                                    <label>${item.value}</label>
+                                </div>
+                            </c:forEach>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Structure</td>
                         <td>${building.structure}</td>
                     </tr>
@@ -56,8 +77,8 @@
                         <td>${building.direction}</td>
                     </tr>
                     <tr>
-                        <td>Rank</td>
-                        <td>${building.rank}</td>
+                        <td>Level</td>
+                        <td>${building.level}</td>
                     </tr>
                     <tr>
                         <td>Area Description</td>
@@ -107,14 +128,7 @@
                         <td>Manager's Phone</td>
                         <td>${building.managerPhone}</td>
                     </tr>
-<%--                        <td>BuildingTypes</td>--%>
-<%--                        <td><div class="row">--%>
-<%--                            <div class="form-check buildingTypeForm">--%>
-<%--                                <form:checkboxes path="buildingTypes" items="${buildingTypeMaps}" cssClass="form-check-input" />--%>
-<%--                            </div>--%>
-<%--                        </div></td>--%>
-<%--                        <td>Rental Area</td>--%>
-<%--                        <td>${building.rentArea}</td>--%>
+
                 </tbody>
             </table>
             <!-- table-end -->

@@ -3,15 +3,13 @@ package com.laptrinhjavaweb.api.admin;
 import com.laptrinhjavaweb.dto.BuildingDTO;
 import com.laptrinhjavaweb.dto.response.ResponseDTO;
 import com.laptrinhjavaweb.service.impl.BuildingService;
-import com.laptrinhjavaweb.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.websocket.server.PathParam;
 
 @RestController(value = "buildingAPIOfAdmin")
 @RequestMapping(value = "/api/building")
 public class BuildingAPI {
+
 
     @Autowired
     private BuildingService buildingService;

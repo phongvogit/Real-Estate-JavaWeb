@@ -68,8 +68,7 @@
                 </c:forEach>
                 </tbody>
             </table>
-        </div></c:forEach>
-
-
+        </div>
+    </c:forEach>
 </body>
 </html>
